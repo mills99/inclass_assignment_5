@@ -23,21 +23,50 @@ The steps of the algorithm are as follows:
 The base cases occur when the sublists are either empty or have one element, as these are inherently sorted. 
  '''
 
+from socket import gaierror
+import statistics
+import re
 
 def quicksort(numbers_in_a_list):
 
 #WRITE YOUR CODE HERE FOR THE RECURSIVE SORTING FUNCTION
+    length = len(numbers_in_a_list)
+    if length <= 1:
+        return numbers_in_a_list
+    else:
+        pivot = numbers_in_a_list.pop()
 
-    return #WHAT DOES IT RETURN?
+    items_greater = []
+    items_lower = []
 
+    for item in numbers_in_a_list:
+        if item > pivot:
+            items_greater.append(item)
+
+        else:
+            items_lower.append(item)
+    return quicksort(items_lower) + [pivot] + quicksort(items_greater)
 
 def main():
 
 # WRITE YOUR MAIN FUNCTION HERE TO READ IN YOUR numbers.txt FILE, RUN THE LIST THROUGH YOUR SORTING ALGORITHM, 
 # AND WRITE OUT YOUR FILE
 
-    return #WHAT DOES IT RETURN?
+    file = open('numbers.txt')
+    text = file.read()
 
-
-if __name__ == "__main__":
-    main()
+    patn = re.sub(r"[\([{})\]]", "", text)      #removes brackets
+    data = patn.split(',') 
+    new_list = [int(item) for item in data]     #convert from string to int
+    sorted_list = (quicksort(new_list))
+ 
+   
+    
+   
+  #  return #WHAT DOES IT RETURN?
+    result = ', '.join(str(item) for item in sorted_list)
+    result = '[' + result + ']'
+    outfile = open('sorted.txt', 'w')
+    outfile.write(result)
+    outfile.close()
+main()
